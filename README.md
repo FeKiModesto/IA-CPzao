@@ -1,12 +1,25 @@
-﻿# Assistente RAG — Disruptive Architectures
+# DisruptiveBot — Assistente RAG da Disruptive Architectures
 
 Chat com **RAG** sobre o site da matéria [Disruptive Architectures](https://arnaldojr.github.io/DisruptiveArchitectures/).
 Responde dúvidas sobre as aulas de IA e IoT usando **somente** o conteúdo do site, cita as páginas usadas e
 diz "não encontrei" quando a informação não está no material.
 
-Projeto do Lab 3.5 (do protótipo ao produto) — Grupo 5.
+**CPzão (CP5 + CP6) — FIAP ADS 2TDSPG - 2026**
 
-**Demo:** _(preencher com a URL do Render depois do deploy)_
+**Demo ao vivo:** https://assistente-disruptive.onrender.com
+
+> ⚠️ O serviço usa o plano gratuito do Render: após inatividade pode levar até 50 segundos para responder a primeira requisição.
+
+## Integrantes
+
+- Felipe Kirschner Modesto (RM561810)
+- João Victor Luiz Oliveira Resende (RM565139)
+- Pedro Vaz Ferreira (RM566551)
+- Vitor Dias dos Santos (RM565422)
+
+## O que é o DisruptiveBot?
+
+Um assistente de IA que responde perguntas sobre o conteúdo da disciplina usando **RAG (Retrieval-Augmented Generation)**: antes de gerar cada resposta, o sistema busca os trechos mais relevantes do site do professor e usa apenas esse contexto para fundamentar a resposta. Se a informação não estiver no material, o bot informa em vez de inventar.
 
 ## Arquitetura
 
@@ -43,7 +56,7 @@ Projeto do Lab 3.5 (do protótipo ao produto) — Grupo 5.
 - **Busca híbrida (embeddings + BM25 + RRF):** embeddings acham o sentido; BM25 acha termos exatos como
   `MQTT`, `ESP32` ou `Lab 3.5`, que a busca semântica sozinha às vezes perde. Os dois rankings são fundidos por
   Reciprocal Rank Fusion.
-- **Índice em NumPy, sem banco vetorial:** o corpus tem ~800 trechos; uma multiplicação de matrizes é instantânea
+- **Índice em NumPy, sem banco vetorial:** o corpus tem ~750 trechos; uma multiplicação de matrizes é instantânea
   e evita um serviço a mais (e RAM extra no plano gratuito). O índice é commitado, então o deploy não recalcula nada.
 - **Trechos por título:** cada trecho carrega `Página > Seção` no texto embutido e a URL da página, o que permite citar a fonte.
 - **Resposta estruturada (JSON):** o modelo devolve `found`, `answer` e `used_sources`. Assim a interface mostra só as
@@ -95,11 +108,12 @@ docker run --rm -p 8000:8000 --env-file .env assistente
 | `GET` | `/health` | Status e quantidade de trechos carregados |
 
 ```bash
-curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" \
+curl -X POST http://localhost:8000/chat \ 
+     -H "Content-Type: application/json" \
      -d '{"question": "O que o Lab 3.5 pede para entregar?"}'
 ```
 
-Documentação interativa em `/docs`.
+Documentação interativa em `/docs`: https://assistente-disruptive.onrender.com/docs
 
 ## Testes e avaliação
 
@@ -117,9 +131,9 @@ A avaliação usa perguntas do material com a página esperada, e perguntas fora
 ## Deploy (Render)
 
 1. Suba o repositório no GitHub (sem `.env`).
-2. No Render: **New → Blueprint** e aponte para o repositório. O `render.yaml` cria o web service (Docker) e o Postgres.
-3. Em *Environment*, defina `GEMINI_API_KEY`.
-4. Aguarde o build; a URL fica em `https://<nome>.onrender.com`. Confira `/health`.
+2. No Render: **New → Blueprint** e aponte para o repositório. O `render.yaml` cria o web service (Docker) e o Postgres automaticamente.
+3. Na tela de configuração do Blueprint, defina `GEMINI_API_KEY` com sua chave do Google AI Studio.
+4. Clique em **Deploy Blueprint** e aguarde (~1 min). Confira o status em `/health`.
 
 Observações do plano gratuito: o serviço hiberna após inatividade (a primeira requisição leva ~30–50 s) e o Postgres gratuito expira em 30 dias.
 
@@ -127,4 +141,12 @@ Observações do plano gratuito: o serviço hiberna após inatividade (a primeir
 
 - O conteúdo vem de uma cópia do site; se o professor atualizar as páginas, é preciso rodar `fetch_docs.py` + `ingest.py` e commitar `data/index/`.
 - Só indexa as páginas `.md`; o texto dos notebooks `.ipynb` não entra.
-- A cota gratuita do Gemini limita o volume de perguntas.
+- A cota gratuita do Gemini limita o volume de perguntas simultâneas.
+
+## Referências
+
+- [Site da disciplina — Disruptive Architectures](https://arnaldojr.github.io/DisruptiveArchitectures/)
+- [Lab 4 — RAG e Bases de Conhecimento](https://arnaldojr.github.io/DisruptiveArchitectures/aulas/genAI/lab4/lab4/)
+- [Lab 3.5 — Do protótipo ao produto](https://arnaldojr.github.io/DisruptiveArchitectures/aulas/genAI/lab3_5/lab3_5/)
+- [Documentação FastAPI](https://fastapi.tiangolo.com/)
+- [Documentação Google GenAI (Gemini)](https://ai.google.dev/gemini-api/docs)
