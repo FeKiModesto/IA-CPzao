@@ -1,0 +1,19 @@
+[
+  {"q": "O que o Lab 3.5 pede para entregar?", "expect": ["lab3_5"]},
+  {"q": "Qual a diferença entre System Prompt, histórico da conversa e base de conhecimento?", "expect": ["lab4"]},
+  {"q": "O que é um embedding e para que serve a similaridade de cosseno?", "expect": ["lab4"]},
+  {"q": "Como o protocolo MQTT funciona? O que é broker, publisher e subscriber?", "expect": ["Protocolo-MQTT", "lab"]},
+  {"q": "Como integrar o ESP32 com o Node-RED?", "expect": ["NodeRED", "Node-RED"]},
+  {"q": "Como usar Bluetooth no ESP32?", "expect": ["Bluetooth"]},
+  {"q": "Como chamar a API do Gemini em Python?", "expect": ["lab2"]},
+  {"q": "O que são saídas estruturadas e function calling no Lab 3?", "expect": ["lab3"]},
+  {"q": "Como funciona uma rede neural convolucional?", "expect": ["cnn", "lab08"]},
+  {"q": "O que é o YOLO e como ele detecta objetos?", "expect": ["yolo"]},
+  {"q": "Como funciona a avaliação do petshop?", "expect": ["petshop"]},
+  {"q": "O que é regressão linear no curso de IA?", "expect": ["regressao"]},
+  {"q": "Quais sensores e atuadores são usados no ESP32?", "expect": ["Sensores"]},
+  {"q": "O que deve ter no projeto final de IoT?", "expect": ["Projeto-Final"]},
+  {"q": "Qual a capital da França?", "expect": null},
+  {"q": "Quem ganhou a Copa do Mundo de 2022?", "expect": null},
+  {"q": "Me dê uma receita de bolo de chocolate.", "expect": null}
+]
